@@ -1,34 +1,33 @@
 package streaming
 
-import {
+import (
 	"log"
 	"net/http"
 	"time"
 
 	"Real-timesales/internal/models"
-	"github.com/gorilla/websocket"
-}
 
-//upgrader configures HTTP-to-WebSocket protocol switching parameters
+	"github.com/gorilla/websocket"
+)
+
+// upgrader configures HTTP-to-WebSocket protocol switching parameters
 var upgrader = websocket.Upgrader{
-	ReadBufferSize: 1024, // 1 KB buffer for inbound frame chunking
+	ReadBufferSize:  1024, // 1 KB buffer for inbound frame chunking
 	WriteBufferSize: 1024, // 1 KB buffer for outbound frame chunking
-	
+
 	CheckOrigin: func(r *http.Request) bool {
-		return true 
+		return true
 	},
 }
 
-
 // client acts as the per-connection state bridge between the central Hub and the physical network socket
 type Client struct {
-	hub  *Hub // reference to the central coordinator
-	conn *websocket.Conn // active underlying WebSocket connection
+	hub  *Hub                    // reference to the central coordinator
+	conn *websocket.Conn         // active underlying WebSocket connection
 	Send chan models.KPISnapshot // buffered outbound message queue (prevents blocking during Hub broadcasts)
 }
 
-
-//writePump pumps messages from the hub to the websocket connectiom
+// writePump pumps messages from the hub to the websocket connectiom
 func (c *Client) writePump() {
 	defer func() { //ensure network socket is closed during the writing phase
 		c.conn.Close()
@@ -56,8 +55,7 @@ func (c *Client) writePump() {
 	}
 }
 
-
-//ServeWs is the HTTP route handler that upgrades regular HTTP requests into full duplex websocket connections
+// ServeWs is the HTTP route handler that upgrades regular HTTP requests into full duplex websocket connections
 func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	//perform websocket handshake
 	conn, err := upgrader.Upgrade(w, r, nil)
@@ -67,7 +65,7 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	}
 	//define client with a 256 item buffered outbound channel to absorb the bursts in traffic
 	client := &Client{
-		hub: hub,
+		hub:  hub,
 		conn: conn,
 		Send: make(chan models.KPISnapshot, 256),
 	}
@@ -76,7 +74,7 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	// start the write pump in a new goroutine so it runs concurrently
 	go client.writePump()
 
-	//no expectation that the frontend is gonna send us messages 
+	//no expectation that the frontend is gonna send us messages
 	// but we must read from the connection to process close events gracefully
 	go func() {
 		defer func() {

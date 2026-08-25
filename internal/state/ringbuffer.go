@@ -25,12 +25,12 @@ func NewRingBuffer(size int) *RingBuffer {
 }
 
 // Add inserts a new transaction and overwrites the oldest element if the ring buffer is full
-func (b *RingBuffer) Add(t models.transaction) {
+func (b *RingBuffer) Add(t models.Transaction) {
 	b.mu.Lock()         //put a write lock on during adding
 	defer b.mu.Unlock() //schedule the unlock once everything is over
 
-	b.data[b.head] = t           //insert at head (itll overwrite if full)
-	b.head = (b.head + 1) % size //increment and wrap
+	b.data[b.head] = t             //insert at head (itll overwrite if full)
+	b.head = (b.head + 1) % b.size //increment and wrap
 
 	if b.count < b.size { //if we're within bounds just increment normally
 		b.count++
@@ -51,7 +51,7 @@ func (b *RingBuffer) GetMetrics() models.KPISnapshot {
 
 	//when it comes to calculating the aggregates we can just count through b.count items since the chronological order doesnt matter
 	for i := 0; i < b.count; i++ {
-		tx := d.data[i]
+		tx := b.data[i]
 		snapshot.TotalRevenue += tx.Revenue
 		snapshot.TotalCOGS += tx.COGS
 	}
