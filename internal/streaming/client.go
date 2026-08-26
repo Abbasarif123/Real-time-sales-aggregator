@@ -75,7 +75,7 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	go client.writePump()
 
 	//no expectation that the frontend is gonna send us messages
-	// but we must read from the connection to process close events gracefully
+	// but we must read from the connection to process close events
 	go func() {
 		defer func() {
 			client.hub.Unregister <- client

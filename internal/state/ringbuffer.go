@@ -41,7 +41,7 @@ func (b *RingBuffer) Add(t models.Transaction) {
 func (b *RingBuffer) GetMetrics() models.KPISnapshot {
 	//put on a read lock and defer the unlock while we read to get metrics
 	b.mu.RLock()
-	defer b.mu.Unlock()
+	defer b.mu.RUnlock()
 
 	var snapshot models.KPISnapshot
 
