@@ -58,6 +58,8 @@ python simulator.py
 ```
 Expected Output: You will see JSON payloads being sent, and the React dashboard will immediately come to life.
 
+![alt text](<Screenshot From 2026-08-26 13-12-54.png>)
+
 ## Key Metric Definitions
 * **Rolling Revenue:** The total gross revenue of the active window (last $N$ transactions).
 * **Gross Margin %:** `(Total Revenue - Cost of Goods Sold) / Total Revenue`.
