@@ -21,12 +21,12 @@ graph LR
 * **The Real-Time Broadcaster (Go WebSockets):** Instantly multiplexes the newly calculated KPI state to all connected dashboard clients simultaneously.
 * **The Executive Dashboard (React/Vite):** A responsive, component-driven UI built with Tailwind CSS and Recharts to visualize the live data stream and maintain an active alert feed.
 
-## 🛠️ Tech Stack
+##  Tech Stack
 * **Backend:** Go (Golang), Gorilla WebSockets
 * **Frontend:** React, TypeScript, Vite, Tailwind CSS v4, Recharts, Lucide Icons
 * **Data Simulation:** Python (`requests`)
 
-## 🚀 Quick Start: Run Locally
+##  Quick Start: Run Locally
 To run this pipeline on your machine, you will need to open three separate terminal windows.
 
 ### 1. Start the Go Backend
@@ -35,7 +35,7 @@ The Go server listens for incoming transactions and handles the WebSocket broadc
 # Terminal 1
 cd Real-timesales
 go run cmd/server/main.go
-
+```
 Expected Output: Server starting on http://localhost:8080
 
 ### 2. Start the React Frontend
@@ -45,7 +45,7 @@ The Vite server hosts the dashboard and connects to the Go WebSocket.
 cd Real-timesales/frontend
 npm install
 npm run dev
-
+```
 Expected Output: Server starting on http://localhost:8080Expected Output: Open http://localhost:5173 in your browser.
 
 ### 3. Start the Python Simulator
@@ -55,7 +55,7 @@ The Python script acts as the checkout system, firing synthetic data into the pi
 cd Real-timesales
 pip install requests
 python simulator.py
-
+```
 Expected Output: You will see JSON payloads being sent, and the React dashboard will immediately come to life.
 
 ## Key Metric Definitions
