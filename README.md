@@ -13,7 +13,7 @@ graph LR
     B --> C[(In-Memory<br/>Ring Buffer)]
     C -->|Aggregates KPIs| D{Gorilla WebSocket<br/>Hub Broadcast}
     D -->|Push JSON State| E[React + TypeScript<br/>Executive Dashboard]
-
+```
 ### Core Components
 * **The Data Generator (Python):** Simulates a high-throughput e-commerce backend, injecting realistic baseline sales data and probabilistically triggering massive statistical anomalies.
 * **The Ingestion Engine (Go):** Receives payloads concurrently and manages state.
